@@ -33,9 +33,9 @@ fun StartScreen(navController: NavController) {
             .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        
+
         Spacer(Modifier.height(100.dp))
-        
+
         Button(
             onClick = {},
             shape = RoundedCornerShape(23.dp),
@@ -45,7 +45,10 @@ fun StartScreen(navController: NavController) {
                 .height(46.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(stringResource(id = R.string.story), color = MaterialTheme.colorScheme.background)
+                Text(
+                    stringResource(id = R.string.story),
+                    color = MaterialTheme.colorScheme.background
+                )
                 Spacer(Modifier.width(8.dp))
                 Image(
                     painter = painterResource(id = R.drawable.history_icon),
@@ -56,9 +59,9 @@ fun StartScreen(navController: NavController) {
                 )
             }
         }
-        
+
         Spacer(Modifier.height(150.dp))
-        
+
         Image(
             painter = painterResource(id = R.drawable.dqlogo),
             modifier = Modifier
@@ -66,10 +69,15 @@ fun StartScreen(navController: NavController) {
                 .height(80.dp),
             contentDescription = null
         )
-        
+
         Spacer(Modifier.height(20.dp))
 
-        Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 25.dp)) {
-        WelcomeCard()}
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 25.dp)
+        ) {
+            WelcomeCard({ navController.navigate("filter_screen") })
+        }
     }
 }
