@@ -72,8 +72,8 @@ class PassingQuizViewModel @Inject constructor(
         }
     }
 
-    fun checkAnswer(userAnswer: String) {
-        val currentQuestion = _uiState.value.currentQuestion ?: return
+    fun checkAnswer(userAnswer: String): Boolean {
+        val currentQuestion = _uiState.value.currentQuestion ?: return false
         val isCorrect = userAnswer == currentQuestion.correctAnswer
         if (isCorrect) {
             _correctAnswersCount.value += 1
@@ -85,6 +85,7 @@ class PassingQuizViewModel @Inject constructor(
                 isCorrect = isCorrect
             )
         )
+        return isCorrect
     }
 
     fun resetQuiz() {

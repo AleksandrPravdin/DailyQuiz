@@ -3,10 +3,25 @@
     <string name="story">История</string>
     <string name="welcome_text">Добро пожаловать\nв DailyQuiz!</string>
     <string name="start_quiz">НАЧАТЬ ВИКТОРИНУ</string>
+    <string name="restart_quiz">НАЧАТЬ ЗАНОВО</string>
     <string name="almost_ready">Почти готовы!</string>
     <string name="choose_category">Осталось выбрать категорию\nи сложность викторины.</string>
     <string name="next">ДАЛЕЕ</string>
+    <string name="finish">ЗАВЕРШИТЬ</string>
     <string name="category">Категория</string>
     <string name="difficult">Сложность</string>
     <string name="mention_about_passing">Вернуться к предыдущим вопросам нельзя</string>
+    <string name="result">Результаты</string>
+    <string name="res_0_logo">Бывает и так!</string>
+    <string name="res_0_text">0/5 — не отчаивайтесь. Начните заново и удивите себя!</string>
+    <string name="res_1_logo">Сложный вопрос?</string>
+    <string name="res_1_text">1/5 — иногда просто не ваш день. Следующая попытка будет лучше!</string>
+    <string name="res_2_logo">Есть над чем поработать</string>
+    <string name="res_2_text">2/5 — не расстраивайтесь, попробуйте ещё раз!</string>
+    <string name="res_3_logo">Хороший результат!</string>
+    <string name="res_3_text">3/5 — вы на верном пути. Продолжайте тренироваться!</string>
+    <string name="res_4_logo">Почти идеально!</string>
+    <string name="res_4_text">4/5 — очень близко к совершенству. Ещё один шаг!</string>
+    <string name="res_5_logo">Идеально!</string>
+    <string name="res_5_text">5/5 — вы ответили на всё правильно. Это блестящий результат!</string>
 </resources>

@@ -19,7 +19,7 @@ import com.example.dailyquiz.R
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun NextButton(onClick: () -> Unit, isEnabled: Boolean, buttonColor: Color) {
+fun NextButton(onClick: () -> Unit, isEnabled: Boolean, buttonColor: Color, string: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -38,7 +38,7 @@ fun NextButton(onClick: () -> Unit, isEnabled: Boolean, buttonColor: Color) {
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = stringResource(id = R.string.next),
+                    text = string,
                     color = MaterialTheme.colorScheme.primary,
                     fontSize = 16.sp
                 )

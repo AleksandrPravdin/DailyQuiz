@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import com.example.dailyquiz.R
 import com.example.dailyquiz.presentation.feature.passing.component.NextButton
 import com.example.dailyquiz.presentation.feature.passing.viewmodel.PassingQuizViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun PassingQuizScreen(
@@ -50,8 +52,19 @@ fun PassingQuizScreen(
     val questionIndex = currentState.currentQuestionIndex
     val totalQuestions = currentState.totalQuestions
 
-    var chooseOption by remember { mutableStateOf(false) }
+    var selectedOption by remember { mutableStateOf<String?>(null) }
+    var showAnswerFeedback by remember { mutableStateOf(false) }
+    var isAnswerCorrect by remember { mutableStateOf(false) }
+    var isNextButtonEnabled by remember { mutableStateOf(false) }
 
+    LaunchedEffect(showAnswerFeedback) {
+        if (showAnswerFeedback) {
+            delay(2000)
+            showAnswerFeedback = false
+            selectedOption = null
+            viewModel.nextQuestion()
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -75,7 +88,10 @@ fun PassingQuizScreen(
                     modifier = Modifier
                         .size(24.dp)
                         .align(Alignment.CenterStart)
-                        .clickable { viewModel.goToFilterScreen() },
+                        .clickable {
+                            viewModel.resetQuiz()
+                            viewModel.goToFilterScreen()
+                        },
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary
                 )
@@ -125,8 +141,6 @@ fun PassingQuizScreen(
                         )
                     }
                     Spacer(Modifier.height(20.dp))
-                    var selectedOption by remember { mutableStateOf<String?>(null) }
-
                     Column(
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
@@ -141,18 +155,35 @@ fun PassingQuizScreen(
                                         if (selectedOption == option)
                                             Modifier.border(
                                                 width = 1.dp,
-                                                color = MaterialTheme.colorScheme.onSurface,
+                                                color = when {
+                                                    showAnswerFeedback && option == selectedOption && isAnswerCorrect ->
+                                                        MaterialTheme.colorScheme.onTertiary
+
+                                                    showAnswerFeedback && option == selectedOption && !isAnswerCorrect ->
+                                                        MaterialTheme.colorScheme.onSecondary
+
+                                                    else -> MaterialTheme.colorScheme.onSurface
+                                                },
                                                 shape = RoundedCornerShape(12.dp)
                                             )
                                         else Modifier
                                     )
                                     .clip(RoundedCornerShape(16.dp))
-                                    .clickable {
-                                        chooseOption = true
-                                        selectedOption = option
-                                    },
+                                    .clickable(
+                                        enabled = !showAnswerFeedback,
+                                        onClick = {
+                                            selectedOption = option
+                                            isNextButtonEnabled = true
+                                        }
+                                    ),
                                 colors = CardDefaults.cardColors(
-                                    containerColor = if (selectedOption == option) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
+                                    containerColor = when {
+                                        selectedOption == option ->
+                                            MaterialTheme.colorScheme.primary
+
+                                        else ->
+                                            MaterialTheme.colorScheme.surface
+                                    }
                                 )
                             ) {
                                 Row(
@@ -160,21 +191,25 @@ fun PassingQuizScreen(
                                     modifier = Modifier
                                         .padding(16.dp)
                                 ) {
-                                    if (selectedOption == option) {
-                                        Image(
-                                            painter = painterResource(id = R.drawable.chosen_option),
-                                            modifier = Modifier
-                                                .size(24.dp),
-                                            contentDescription = null
-                                        )
-                                    } else {
-                                        Image(
-                                            painter = painterResource(id = R.drawable.empty_choise),
-                                            modifier = Modifier
-                                                .size(24.dp),
-                                            contentDescription = null
-                                        )
+                                    val iconRes = when {
+                                        showAnswerFeedback && option == selectedOption && isAnswerCorrect ->
+                                            R.drawable.right_answer
+
+                                        showAnswerFeedback && option == selectedOption && !isAnswerCorrect ->
+                                            R.drawable.wrong_answer
+
+                                        selectedOption == option ->
+                                            R.drawable.chosen_option
+
+                                        else ->
+                                            R.drawable.empty_choise
                                     }
+
+                                    Image(
+                                        painter = painterResource(id = iconRes),
+                                        modifier = Modifier.size(24.dp),
+                                        contentDescription = null
+                                    )
 
                                     Spacer(modifier = Modifier.width(12.dp))
 
@@ -191,16 +226,21 @@ fun PassingQuizScreen(
                     NextButton(
                         onClick = {
                             selectedOption?.let { answer ->
-                                viewModel.checkAnswer(answer)
-                                viewModel.nextQuestion()
+                                isAnswerCorrect = viewModel.checkAnswer(answer)
+                                showAnswerFeedback = true
+                                isNextButtonEnabled = false
                             }
-                            selectedOption = null
                         },
-                        isEnabled = chooseOption,
-                        buttonColor = if (chooseOption) {
+                        isEnabled = isNextButtonEnabled && !showAnswerFeedback,
+                        buttonColor = if (isNextButtonEnabled && !showAnswerFeedback) {
                             MaterialTheme.colorScheme.background
                         } else {
                             MaterialTheme.colorScheme.secondary
+                        },
+                        string = if (questionIndex == totalQuestions-1) {
+                            stringResource(id = R.string.finish)
+                        } else {
+                            stringResource(id = R.string.next)
                         }
                     )
                 }

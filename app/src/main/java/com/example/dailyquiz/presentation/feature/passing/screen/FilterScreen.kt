@@ -184,7 +184,8 @@ fun FilterScreen(viewModel: PassingQuizViewModel) {
                                 difficulty = selectedDifficulty?.id
                             )
 
-                        }, isEnabled = isButtonEnabled, buttonColor = buttonColor)
+                        }, isEnabled = isButtonEnabled, buttonColor = buttonColor,
+                            string = stringResource(id = R.string.next))
                     }
                 }
             }
