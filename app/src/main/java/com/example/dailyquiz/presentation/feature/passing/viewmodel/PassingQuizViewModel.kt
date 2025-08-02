@@ -3,8 +3,12 @@ package com.example.dailyquiz.presentation.feature.passing.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dailyquiz.domain.model.Question
+import com.example.dailyquiz.domain.model.QuizCategory
+import com.example.dailyquiz.domain.model.QuizDifficult
 import com.example.dailyquiz.domain.model.UserAnswer
+import com.example.dailyquiz.domain.usecases.GetLastQuizNumberUseCase
 import com.example.dailyquiz.domain.usecases.GetQuizQuestionsUseCase
+import com.example.dailyquiz.domain.usecases.SaveQuizResultUseCase
 import com.example.dailyquiz.presentation.feature.passing.PassingQuizScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,10 +16,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 @HiltViewModel
 class PassingQuizViewModel @Inject constructor(
-    private val getQuizQuestionsUseCase: GetQuizQuestionsUseCase
+    private val getQuizQuestionsUseCase: GetQuizQuestionsUseCase,
+    private val saveQuizResultUseCase: SaveQuizResultUseCase,
+    private val getLastQuizNumberUseCase: GetLastQuizNumberUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(PassingQuizUiState())
@@ -29,6 +34,9 @@ class PassingQuizViewModel @Inject constructor(
 
     private val _correctAnswersCount = MutableStateFlow(0)
     val correctAnswersCount: StateFlow<Int> = _correctAnswersCount
+
+    private var currentCategory: String = ""
+    private var currentDifficulty: String = ""
     fun goToStartScreen() {
         _screenState.value = PassingQuizScreenState.START
     }
@@ -51,6 +59,9 @@ class PassingQuizViewModel @Inject constructor(
         difficulty: String? = null
     ) {
         viewModelScope.launch {
+            _uiState.value.error=null
+            currentCategory = categoryId?.let { QuizCategory.fromId(it) } ?: "Any Category"
+            currentDifficulty = difficulty?.let { QuizDifficult.fromId(it) } ?: "Any Difficulty"
             try {
                 val questions = getQuizQuestionsUseCase(
                     amount = amount,
@@ -62,7 +73,7 @@ class PassingQuizViewModel @Inject constructor(
                     it.copy(
                         questions = questions,
                         currentQuestion = questions.firstOrNull(),
-                        totalQuestions = questions.size
+                        totalQuestions = questions.size,
                     )
                 }
                 goToPassingScreen()
@@ -70,6 +81,10 @@ class PassingQuizViewModel @Inject constructor(
                 _uiState.update { it.copy(error = "Ошибка! Попробуйте ещё раз") }
             }
         }
+    }
+
+    private suspend fun getNextQuizNumber(): Int {
+        return getLastQuizNumberUseCase() + 1
     }
 
     fun checkAnswer(userAnswer: String): Boolean {
@@ -107,7 +122,23 @@ class PassingQuizViewModel @Inject constructor(
                 )
             }
         } else {
+            saveQuizResult()
             goToResultScreen()
+        }
+    }
+
+    private fun saveQuizResult() {
+        viewModelScope.launch {
+            val nextQuizNumber = getNextQuizNumber()
+            val sessionName = "Quiz $nextQuizNumber"
+            saveQuizResultUseCase(
+                sessionName = sessionName,
+                category = currentCategory,
+                difficulty = currentDifficulty,
+                correctAnswers = _correctAnswersCount.value,
+                totalQuestions = _uiState.value.totalQuestions,
+                userAnswers = _userAnswers
+            )
         }
     }
 }
@@ -117,6 +148,5 @@ data class PassingQuizUiState(
     val currentQuestion: Question? = null,
     val currentQuestionIndex: Int = 0,
     val totalQuestions: Int = 0,
-    val error: String? = null
+    var error: String? = null
 )
-

@@ -1,11 +1,9 @@
 package com.example.dailyquiz.presentation.feature.passing.screen
 
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,29 +11,24 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -45,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import com.example.dailyquiz.R
 import com.example.dailyquiz.domain.model.QuizCategory
 import com.example.dailyquiz.domain.model.QuizDifficult
+import com.example.dailyquiz.presentation.feature.passing.component.ExpandableDropdown
 import com.example.dailyquiz.presentation.feature.passing.component.NextButton
 import com.example.dailyquiz.presentation.feature.passing.viewmodel.PassingQuizViewModel
 
@@ -59,6 +53,8 @@ fun FilterScreen(viewModel: PassingQuizViewModel) {
     val isButtonEnabled = selectedCategory != null && selectedDifficulty != null
     val buttonColor =
         if (isButtonEnabled) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surface
+    val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
     var isLoadingQuiz by remember { mutableStateOf(false) }
 
@@ -72,7 +68,7 @@ fun FilterScreen(viewModel: PassingQuizViewModel) {
             .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (isLoadingQuiz) {
+        if (isLoadingQuiz&&uiState.error==null) {
             Spacer(modifier = Modifier.weight(1f))
             Box(
                 modifier = Modifier
@@ -88,6 +84,9 @@ fun FilterScreen(viewModel: PassingQuizViewModel) {
             }
             Spacer(modifier = Modifier.weight(1f))
         } else {
+            if(uiState.error!=null){
+                Toast.makeText(context,uiState.error,Toast.LENGTH_SHORT ).show()
+            }
             Spacer(Modifier.height(100.dp))
 
             Image(
@@ -108,7 +107,7 @@ fun FilterScreen(viewModel: PassingQuizViewModel) {
                     modifier = Modifier
                         .background(
                             color = MaterialTheme.colorScheme.primary,
-                            shape = RoundedCornerShape(30.dp)
+                            shape = RoundedCornerShape(40.dp)
                         )
                         .fillMaxWidth()
                 ) {
@@ -186,76 +185,6 @@ fun FilterScreen(viewModel: PassingQuizViewModel) {
 
                         }, isEnabled = isButtonEnabled, buttonColor = buttonColor,
                             string = stringResource(id = R.string.next))
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun ExpandableDropdown(
-    options: List<String>,
-    selectedOption: String,
-    onOptionSelected: (String) -> Unit,
-    label: String
-) {
-    var expanded by remember { mutableStateOf(false) }
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .background(MaterialTheme.colorScheme.surface)
-            .clickable { expanded = !expanded }
-            .padding(16.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = if (selectedOption.isNotBlank()) selectedOption else label,
-                modifier = Modifier.weight(1f),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            Icon(
-
-                painter = if (expanded) {
-                    painterResource(id = R.drawable.arrow_drop_up)
-                } else {
-                    painterResource(id = R.drawable.arrow_drop_down)
-                },
-                tint = MaterialTheme.colorScheme.onSurface,
-                contentDescription = null
-            )
-        }
-
-        AnimatedVisibility(visible = expanded) {
-            Column(modifier = Modifier.padding(top = 8.dp)) {
-                Box(
-                    modifier = Modifier
-                        .heightIn(max = 123.dp)
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    Column {
-                        options.forEach { option ->
-                            Text(
-                                text = option,
-                                fontSize = 14.sp,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        onOptionSelected(option)
-                                        expanded = false
-                                    }
-                                    .padding(vertical = 8.dp),
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                        }
                     }
                 }
             }

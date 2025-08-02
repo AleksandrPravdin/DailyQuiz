@@ -1,11 +1,11 @@
 package com.example.dailyquiz.domain.usecases
 
 import com.example.dailyquiz.domain.model.Question
-import com.example.dailyquiz.domain.repository.QuizRepository
+import com.example.dailyquiz.domain.repository.QuizPassingRepository
 import javax.inject.Inject
 
 class GetQuizQuestionsUseCase @Inject constructor(
-    private val repository: QuizRepository
+    private val repository: QuizPassingRepository
 ) {
     suspend operator fun invoke(
         amount: Int,

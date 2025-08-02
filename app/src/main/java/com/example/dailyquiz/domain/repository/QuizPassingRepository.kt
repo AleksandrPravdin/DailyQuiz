@@ -2,7 +2,7 @@ package com.example.dailyquiz.domain.repository
 
 import com.example.dailyquiz.domain.model.Question
 
-interface QuizRepository {
+interface QuizPassingRepository {
     suspend fun getQuestions(
         amount: Int,
         category: Int? = null,

@@ -27,4 +27,11 @@ enum class QuizCategory(val id: Int, val displayName: String) {
     CARTOONS(32, "Entertainment: Cartoons & Animations");
 
     override fun toString(): String = displayName
+
+    companion object {
+        fun fromId(id: Int): String {
+            return values().find { it.id == id }?.displayName
+                ?: "General Knowledge"
+        }
+    }
 }

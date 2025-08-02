@@ -61,7 +61,7 @@ fun ResultQuizScreen(viewModel: PassingQuizViewModel) {
                 modifier = Modifier
                     .background(
                         color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(30.dp)
+                        shape = RoundedCornerShape(40.dp)
                     )
                     .fillMaxWidth()
             ) {

@@ -27,7 +27,7 @@ import com.example.dailyquiz.presentation.feature.passing.component.WelcomeCard
 import com.example.dailyquiz.presentation.feature.passing.viewmodel.PassingQuizViewModel
 
 @Composable
-fun StartScreen(viewModel: PassingQuizViewModel) {
+fun StartScreen(navController: NavController, viewModel: PassingQuizViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -38,7 +38,9 @@ fun StartScreen(viewModel: PassingQuizViewModel) {
         Spacer(Modifier.height(100.dp))
 
         Button(
-            onClick = {},
+            onClick = {
+                      navController.navigate("history_quiz_screen")
+            },
             shape = RoundedCornerShape(23.dp),
             colors = ButtonDefaults.buttonColors(
 

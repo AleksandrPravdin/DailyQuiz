@@ -6,4 +6,10 @@ enum class QuizDifficult(val id: String, val displayName: String) {
     FILM("hard", "Hard");
 
     override fun toString(): String = displayName
+    companion object {
+        fun fromId(id: String): String {
+            return QuizDifficult.values().find { it.id == id }?.displayName
+                ?: "Easy"
+        }
+    }
 }

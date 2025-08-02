@@ -12,11 +12,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.dailyquiz.R
-import androidx.compose.ui.graphics.Color
 
 @Composable
 fun NextButton(onClick: () -> Unit, isEnabled: Boolean, buttonColor: Color, string: String) {

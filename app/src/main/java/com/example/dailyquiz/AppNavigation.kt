@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.dailyquiz.presentation.feature.history.screen.HistoryQuizScreen
 import com.example.dailyquiz.presentation.feature.passing.PassingQuizHostScreen
 
 @Composable
@@ -12,7 +13,11 @@ fun AppNavigation() {
     NavHost(navController = navController, startDestination = "quiz_host_screen") {
 
         composable("quiz_host_screen") {
-            PassingQuizHostScreen()
+            PassingQuizHostScreen(navController)
+        }
+
+        composable("history_quiz_screen") {
+            HistoryQuizScreen(navController)
         }
 
     }
