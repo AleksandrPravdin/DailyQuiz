@@ -8,4 +8,5 @@
     <string name="next">ДАЛЕЕ</string>
     <string name="category">Категория</string>
     <string name="difficult">Сложность</string>
+    <string name="mention_about_passing">Вернуться к предыдущим вопросам нельзя</string>
 </resources>

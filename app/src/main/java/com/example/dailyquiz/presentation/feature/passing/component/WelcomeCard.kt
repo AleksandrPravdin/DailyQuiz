@@ -1,4 +1,4 @@
-package com.example.dailyquiz.presentation.component
+package com.example.dailyquiz.presentation.feature.passing.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

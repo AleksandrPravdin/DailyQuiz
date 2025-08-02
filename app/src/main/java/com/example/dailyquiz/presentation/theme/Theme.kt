@@ -1,4 +1,4 @@
-package com.example.dailyquiz.ui.theme
+package com.example.dailyquiz.presentation.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
     secondary = DarkGrey,
-    tertiary = Pink80,
+    tertiary = PurpleGrey,
     background = Purple,
     surface = Grey,
     onSurface = DarkPurple

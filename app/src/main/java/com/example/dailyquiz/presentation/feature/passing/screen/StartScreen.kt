@@ -1,4 +1,4 @@
-package com.example.dailyquiz.presentation.screen
+package com.example.dailyquiz.presentation.feature.passing.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,10 +23,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.dailyquiz.R
-import com.example.dailyquiz.presentation.component.WelcomeCard
+import com.example.dailyquiz.presentation.feature.passing.component.WelcomeCard
+import com.example.dailyquiz.presentation.feature.passing.viewmodel.PassingQuizViewModel
 
 @Composable
-fun StartScreen(navController: NavController) {
+fun StartScreen(viewModel: PassingQuizViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -77,7 +78,7 @@ fun StartScreen(navController: NavController) {
                 .fillMaxWidth()
                 .padding(horizontal = 25.dp)
         ) {
-            WelcomeCard({ navController.navigate("filter_screen") })
+            WelcomeCard({ viewModel.goToFilterScreen() })
         }
     }
 }

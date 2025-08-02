@@ -1,4 +1,4 @@
-package com.example.dailyquiz.ui.theme
+package com.example.dailyquiz.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

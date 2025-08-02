@@ -9,14 +9,23 @@ class QuizMapper {
             type = dto.type,
             difficulty = dto.difficulty,
             category = dto.category,
-            text = dto.question,
-            correctAnswer = dto.correct_answer,
-            incorrectAnswers = dto.incorrect_answers,
-            allAnswers = (dto.incorrect_answers + dto.correct_answer).shuffled()
+            text = replaceSpecialSymbols(dto.question),
+            correctAnswer = replaceSpecialSymbols(dto.correct_answer),
+            incorrectAnswers = dto.incorrect_answers.map { replaceSpecialSymbols(it) },
+            allAnswers = (dto.incorrect_answers.map { replaceSpecialSymbols(it) } +
+                    replaceSpecialSymbols(dto.correct_answer)).shuffled()
         )
     }
 
     fun mapDtoListToDomain(dtoList: List<QuestionDto>): List<Question> {
         return dtoList.map { mapDtoToDomain(it) }
+    }
+
+    private fun replaceSpecialSymbols(text: String): String {
+        return text.replace("&quot;", "\"")
+            .replace("&#039;", "'")
+            .replace("&amp;", "&")
+            .replace("&lt;", "<")
+            .replace("&gt;", ">")
     }
 }
