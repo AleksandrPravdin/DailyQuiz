@@ -32,7 +32,7 @@ import com.example.dailyquiz.R
 import com.example.dailyquiz.data.local.entities.UserAnswerEntity
 
 @Composable
-fun DetailQuizCard(userAnswerEntity: UserAnswerEntity, index: Int) {
+fun DetailAnswerCard(userAnswerEntity: UserAnswerEntity, index: Int) {
     Box(
         modifier = Modifier.padding(start = 25.dp, end = 25.dp, top = 25.dp)
     ) {

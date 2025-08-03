@@ -69,7 +69,15 @@ fun FilterScreen(viewModel: PassingQuizViewModel) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (isLoadingQuiz&&uiState.error==null) {
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.height(300.dp))
+            Image(
+                painter = painterResource(id = R.drawable.dqlogo),
+                modifier = Modifier
+                    .width(300.dp)
+                    .height(80.dp),
+                contentDescription = null
+            )
+            Spacer(modifier = Modifier.height(100.dp))
             Box(
                 modifier = Modifier
                     .wrapContentSize()
@@ -82,7 +90,6 @@ fun FilterScreen(viewModel: PassingQuizViewModel) {
                     strokeWidth = 2.dp
                 )
             }
-            Spacer(modifier = Modifier.weight(1f))
         } else {
             if(uiState.error!=null){
                 Toast.makeText(context,uiState.error,Toast.LENGTH_SHORT ).show()

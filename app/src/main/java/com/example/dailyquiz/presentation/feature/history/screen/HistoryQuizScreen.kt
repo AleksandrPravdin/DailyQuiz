@@ -1,5 +1,6 @@
 package com.example.dailyquiz.presentation.feature.history.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -42,6 +43,11 @@ fun HistoryQuizScreen(
     viewModel: HistoryQuizViewModel = hiltViewModel()
 ) {
     val quizResults by viewModel.quizResults.collectAsState(initial = emptyList())
+
+    BackHandler {
+        navController.popBackStack("quiz_host_screen", inclusive = false)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -63,12 +69,17 @@ fun HistoryQuizScreen(
             {
                 items(quizResults.reversed()) { result ->
                     QuizResultCard(
-                        result = result, navController = navController, onDelete = { viewModel.deleteQuizResult(result) }
+                        result = result,
+                        navController = navController,
+                        onDelete = { viewModel.deleteQuizResult(result) }
                     )
                 }
             }
         } else {
-            Column(modifier = Modifier.padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                modifier = Modifier.padding(20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Box(
                     modifier = Modifier
                         .background(
@@ -100,7 +111,7 @@ fun HistoryQuizScreen(
                         ) {
                             Button(
                                 onClick = {
-                                    navController.navigate("quiz_host_screen")
+                                    navController.popBackStack("quiz_host_screen", inclusive = false)
                                 },
                                 shape = RoundedCornerShape(15.dp),
                                 colors = ButtonDefaults.buttonColors(

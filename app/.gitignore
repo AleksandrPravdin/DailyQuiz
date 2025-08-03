@@ -1,1 +1,16 @@
-/build
+# Android
+build/
+.gradle/
+*.apk
+*.aab
+
+# IDE
+.idea/
+*.iml
+
+# Local configuration file
+local.properties
+
+# Keystore files
+*.jks
+*.keystore

@@ -1,5 +1,6 @@
 package com.example.dailyquiz.data.remote.mapper
 
+import android.text.Html
 import com.example.dailyquiz.data.remote.dto.QuestionDto
 import com.example.dailyquiz.domain.model.Question
 
@@ -22,28 +23,11 @@ class QuizMapper {
     }
 
     private fun replaceSpecialSymbols(text: String): String {
-        return text.replace("&quot;", "\"")
-            .replace("&#039;", "'")
-            .replace("&amp;", "&")
-            .replace("&lt;", "<")
-            .replace("&gt;", ">")
-            .replace("&eacute;", "é")
-            .replace("&Eacute;", "É")
-            .replace("&sup2;", "²")
-            .replace("&deg;", "°")
-            .replace("&shy;", "\u00AD")
-            .replace("&rsquo;", "’")
-            .replace("&nbsp;", " ")
-            .replace("&ndash;", "–")
-            .replace("&mdash;", "—")
-            .replace("&copy;", "©")
-            .replace("&reg;", "®")
-            .replace("&euro;", "€")
-            .replace("&pound;", "£")
-            .replace("&cent;", "¢")
-            .replace("&yen;", "¥")
-            .replace("&sect;", "§")
-            .replace("&laquo;", "«")
-            .replace("&raquo;", "»")
+        return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY).toString()
+        } else {
+            @Suppress("DEPRECATION")
+            Html.fromHtml(text).toString()
+        }
     }
 }
