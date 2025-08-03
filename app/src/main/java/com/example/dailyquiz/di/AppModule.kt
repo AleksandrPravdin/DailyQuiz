@@ -40,7 +40,7 @@ object AppModule {
             context,
             QuizDatabase::class.java,
             "quiz-database"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
     @Provides

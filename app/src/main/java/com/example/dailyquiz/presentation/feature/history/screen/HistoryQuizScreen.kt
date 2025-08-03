@@ -63,7 +63,7 @@ fun HistoryQuizScreen(
             {
                 items(quizResults.reversed()) { result ->
                     QuizResultCard(
-                        result = result, onDelete = { viewModel.deleteQuizResult(result) }
+                        result = result, navController = navController, onDelete = { viewModel.deleteQuizResult(result) }
                     )
                 }
             }

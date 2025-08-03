@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [QuizResultEntity::class, UserAnswerEntity::class],
-    version = 1
+    version = 2
 )
 abstract class QuizDatabase : RoomDatabase() {
     abstract fun quizResultDao(): QuizResultDao

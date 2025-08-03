@@ -19,6 +19,9 @@ interface QuizResultDao {
     @Query("SELECT * FROM quiz_results ORDER BY timestamp DESC")
     fun getAllQuizResults(): Flow<List<QuizResultEntity>>
 
+    @Query("SELECT * FROM quiz_results WHERE id = :id")
+    suspend fun getQuizResultById(id: Long): QuizResultEntity?
+
     @Query("SELECT * FROM user_answers WHERE quizResultId = :resultId")
     suspend fun getUserAnswersForResult(resultId: Long): List<UserAnswerEntity>
 

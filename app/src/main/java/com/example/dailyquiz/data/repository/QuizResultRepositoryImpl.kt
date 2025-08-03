@@ -19,11 +19,10 @@ class QuizResultRepositoryImpl @Inject constructor(
         totalQuestions: Int,
         userAnswers: List<UserAnswer>
     ): Long {
-        val timestamp = System.currentTimeMillis()
         val quizResultId = quizResultDao.insertQuizResult(
             QuizResultEntity(
                 sessionName = sessionName,
-                timestamp = timestamp,
+                timestamp = System.currentTimeMillis(),
                 category = category,
                 difficulty = difficulty,
                 correctAnswers = correctAnswers,
@@ -32,12 +31,13 @@ class QuizResultRepositoryImpl @Inject constructor(
         )
 
         val answerEntities = userAnswers.map { answer ->
-            UserAnswerEntity(
+            UserAnswerEntity.create(
                 quizResultId = quizResultId,
                 questionText = answer.question.text,
                 userAnswer = answer.userAnswer,
                 correctAnswer = answer.question.correctAnswer,
-                isCorrect = answer.isCorrect
+                isCorrect = answer.isCorrect,
+                allOptions = answer.question.allAnswers
             )
         }
 
@@ -45,17 +45,22 @@ class QuizResultRepositoryImpl @Inject constructor(
         return quizResultId
     }
 
+    override suspend fun getUserAnswers(resultId: Long): List<UserAnswerEntity> {
+        return quizResultDao.getUserAnswersForResult(resultId)
+    }
+
     override suspend fun getLastQuizNumber(): Int {
         return return (quizResultDao.getLastQuizNumber() ?: 0).toInt()
+    }
+
+    override suspend fun getQuizResultById(id: Long): QuizResultEntity? {
+        return quizResultDao.getQuizResultById(id)
     }
 
     override fun getAllQuizResults(): Flow<List<QuizResultEntity>> {
         return quizResultDao.getAllQuizResults()
     }
 
-    override suspend fun getUserAnswers(resultId: Long): List<UserAnswerEntity> {
-        return quizResultDao.getUserAnswersForResult(resultId)
-    }
 
     override suspend fun deleteQuizResult(quizResult: QuizResultEntity) {
         quizResultDao.deleteQuizResult(quizResult)

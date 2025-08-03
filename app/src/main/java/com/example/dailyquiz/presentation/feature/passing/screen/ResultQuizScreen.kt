@@ -126,11 +126,11 @@ fun ResultQuizScreen(viewModel: PassingQuizViewModel) {
                             textAlign = TextAlign.Center
                         )
                     }
-                    Spacer(Modifier.height(40.dp))
+                    Spacer(Modifier.height(60.dp))
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(30.dp)
+                            .padding(start = 30.dp, end = 30.dp, bottom=25.dp)
                     ) {
                         Button(
                             onClick = {

@@ -37,6 +37,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.dailyquiz.R
 import com.example.dailyquiz.data.local.entities.QuizResultEntity
 import com.example.dailyquiz.utils.toDayMonthString
@@ -45,7 +46,7 @@ import com.example.dailyquiz.utils.toTimeString
 
 @Composable
 fun QuizResultCard(
-    result: QuizResultEntity, onDelete: () -> Unit
+    result: QuizResultEntity, onDelete: () -> Unit, navController: NavController
 ) {
     val correctAnswerCount = result.correctAnswers
     val totalQuestions = result.totalQuestions
@@ -57,7 +58,8 @@ fun QuizResultCard(
             .padding(start = 25.dp, end = 25.dp, bottom = 25.dp)
             .pointerInput(Unit) {
                 detectTapGestures(
-                    onLongPress = { showContextMenu = true }
+                    onLongPress = { showContextMenu = true },
+                    onTap = {navController.navigate("detail_quiz_screen/${result.id}")}
                 )
             }
     ) {

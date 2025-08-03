@@ -222,7 +222,7 @@ fun PassingQuizScreen(
                             }
                         }
                     }
-                    Spacer(modifier = Modifier.height(60.dp))
+                    Spacer(modifier = Modifier.height(40.dp))
                     NextButton(
                         onClick = {
                             selectedOption?.let { answer ->

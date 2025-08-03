@@ -55,6 +55,9 @@ dependencies {
     val nav_version = "2.8.4"
 
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    implementation ("com.google.code.gson:gson:2.10.1")
+
 
 
     implementation(libs.androidx.room.runtime)

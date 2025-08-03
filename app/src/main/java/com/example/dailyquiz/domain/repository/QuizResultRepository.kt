@@ -17,6 +17,8 @@ interface QuizResultRepository {
 
     fun getAllQuizResults(): Flow<List<QuizResultEntity>>
 
+    suspend fun getQuizResultById(id: Long): QuizResultEntity?
+
     suspend fun getUserAnswers(resultId: Long): List<UserAnswerEntity>
 
     suspend fun deleteQuizResult(quizResult: QuizResultEntity)
